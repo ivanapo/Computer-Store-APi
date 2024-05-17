@@ -113,14 +113,19 @@ namespace ComputerStore.Controllers
                     return BadRequest();
                 }
 
+
                 var categoryToUpdate = _mapper.Map<Category>(updatedCategoryDTO);
+
+                categoryToUpdate.CategoryId = updatedCategoryDTO.Id;
+
+
                 if (!_iCategoryInterface.UpdateCategory(categoryToUpdate))
                 {
                     ModelState.AddModelError("", "Something went wrong while updating the category.");
                     return StatusCode(500, ModelState);
                 }
 
-                return Ok("Update Successfully");
+                return NoContent();
             }
             catch (Exception ex)
             {

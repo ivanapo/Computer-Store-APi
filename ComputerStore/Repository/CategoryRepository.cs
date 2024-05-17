@@ -22,6 +22,7 @@ namespace ComputerStore.Repository
             {
                 var categoryDTO = new CategoryDTO
                 {
+                    Id = category.CategoryId,
                     Name = category.Name,
                     Description = category.Description,
                 };
@@ -62,8 +63,13 @@ namespace ComputerStore.Repository
         }
         public bool UpdateCategory(Category category)
         {
-            _context.Categories.Update(category);
-            return Save(); 
+            var existingCategory = _context.Categories.Find(category.CategoryId);
+            if (existingCategory != null)
+            {
+                _context.Entry(existingCategory).CurrentValues.SetValues(category);
+                return Save();
+            }
+            return false;
         }
         public bool DeleteCategory(int id)
         {
